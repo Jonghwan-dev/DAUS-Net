@@ -7,6 +7,7 @@ from torch.utils.data import Dataset
 from torch.utils.data.distributed import DistributedSampler
 from torch import Tensor
 from typing import Sequence
+import csv
 
 # prompt info dict
 # task prompt
@@ -235,19 +236,45 @@ class USdatasetOmni_seg(Dataset):
 
 
 class USdatasetOmni_cls(Dataset):
-    def __init__(self, base_dir, split, transform=None, prompt=False):
+    def __init__(self, base_dir, split, transform=None, prompt=False, del_outlier: bool = False):
         self.transform = transform
         self.split = split
         self.data_dir = base_dir
         self.sample_list = []
         self.subset_len = []
         self.prompt = prompt
+        self.del_outlier = bool(del_outlier)
 
-        for dataset_name in os.listdir(os.path.join(base_dir, "classification")):
-            self.sample_list.extend(list_add_prefix(os.path.join(
-                base_dir, "classification", dataset_name, split + ".txt"), dataset_name, None))
-            self.subset_len.append(len(list_add_prefix(os.path.join(
-                base_dir, "classification", dataset_name, split + ".txt"), dataset_name, None)))
+        # build outlier set from csv (keyed by "organ/rel") for the current split
+        outlier_set = set()
+        if self.del_outlier:
+            try:
+                csv_path = os.path.join(os.path.dirname(__file__), "cls_outliers_organ.csv")
+                if os.path.exists(csv_path):
+                    with open(csv_path, newline='') as f:
+                        reader = csv.DictReader(f)
+                        for row in reader:
+                            if str(row.get('is_outlier', '')).lower() == 'true' and row.get('split', '') == split:
+                                organ = row.get('organ', '').strip()
+                                rel = row.get('rel', '').strip()
+                                if organ and rel:
+                                    outlier_set.add(f"{organ}/{rel}")
+            except Exception:
+                # if csv is missing or malformed, fall back to no filtering
+                outlier_set = set()
+
+        # load and filter per-dataset to keep subset_len correct
+        cls_root = os.path.join(base_dir, "classification")
+        for dataset_name in os.listdir(cls_root):
+            list_path = os.path.join(base_dir, "classification", dataset_name, split + ".txt")
+            orig_list = list_add_prefix(list_path, dataset_name, None)
+            if self.del_outlier and outlier_set:
+                # filter out outliers
+                filtered = [p for p in orig_list if p not in outlier_set]
+            else:
+                filtered = orig_list
+            self.sample_list.extend(filtered)
+            self.subset_len.append(len(filtered))
 
     def __len__(self):
         return len(self.sample_list)

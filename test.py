@@ -88,8 +88,11 @@ parser.add_argument('--scale_mode', type=str, default='sigmoid', choices=['sigmo
 
 parser.add_argument('--film_scale', type=float, default=0.7, help='film scale')
 parser.add_argument('--prior_lambda', type=float, default=0.5, help='prior lambda')
-parser.add_argument('--cls_head_variant', type=str, default='linear', choices=['linear','per_head_mlp'], help='classification head variant')
-parser.add_argument('--cls_dropout', type=float, default=0.3, help='classification dropout probability')
+parser.add_argument('--cls_head_variant', type=str, default='linear',
+                    choices=['linear', 'shared_mlp', 'per_head_mlp'],
+                    help='classification head type: linear | shared_mlp | per_head_mlp')
+parser.add_argument('--cls_dropout', type=float, default=0.3,
+                    help='dropout for classification MLP trunks (if used)')
 
 args = parser.parse_args()
 config = get_config(args)

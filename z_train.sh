@@ -12,6 +12,7 @@ BS=${BS:-32}
 MAX_EPOCHS=${MAX_EPOCHS:-200}
 PATIENCE=${PATIENCE:-45}
 ES_METRIC=${ES_METRIC:-total_mean}  # total_mean | seg_mean | cls_mean
+DEL_OUTLIER=${DEL_OUTLIER:-0}  # 1 to remove outliers, 0 to keep (default)
 
 # 재현성: 전역 시드와 결정성
 SEED=${SEED:-42}
@@ -41,6 +42,7 @@ EXTRA_ARGS=()
 if [[ -n "${AMP_DTYPE}" ]]; then EXTRA_ARGS+=(--amp_dtype "${AMP_DTYPE}"); fi
 EXTRA_ARGS+=(--lora_rank "${LORA_RANK}" --lora_alpha "${LORA_ALPHA}" --lora_dropout "${LORA_DROPOUT}")
 if [[ -n "${LORA_ONLY}" ]]; then EXTRA_ARGS+=(--lora_only); fi
+if [[ "${DEL_OUTLIER}" == "1" ]]; then EXTRA_ARGS+=(--del_outlier); fi
 
 # ========== 실행 ==========
 torchrun --nproc_per_node=${NPROC:-1} train.py \
@@ -82,7 +84,7 @@ torchrun --nproc_per_node=${NPROC:-1} train.py \
   --plateau_patience ${PLATEAU_PATIENCE:-20} \
   --film_scale ${FILM_SCALE:-0.7} \
   --prior_lambda ${PRIOR_LAMBDA:-0.5} \
-  --cls_dropout ${CLS_DROPOUT:-0.2} \
-  --cls_head_variant ${CLS_HEAD_VARIANT:-shared_mlp} \
+  --cls_dropout ${CLS_DROPOUT:-0.0} \
+  --cls_head_variant ${CLS_HEAD_VARIANT:-linear} \
   "${WANDB_ARGS[@]}" \
   "${EXTRA_ARGS[@]}"

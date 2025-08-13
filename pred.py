@@ -1,5 +1,3 @@
-# pred.py
-
 import os
 import cv2
 import json
@@ -84,7 +82,7 @@ class Model:
             film_scale = float(os.environ.get('FILM_SCALE', '0.7'))
             prior_lambda = float(os.environ.get('PRIOR_LAMBDA', '0.5'))
             cls_head_variant = os.environ.get('CLS_HEAD_VARIANT', 'linear')
-            cls_dropout = float(os.environ.get('CLS_DROPOUT', '0.3'))
+            cls_dropout = float(os.environ.get('CLS_DROPOUT', '0.0'))
 
 
         args = Args()

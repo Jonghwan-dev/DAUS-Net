@@ -66,8 +66,6 @@ def _restore_mask_from_padded(pred_mask_hw, orig_h, orig_w, out_h, out_w):
     restored = cv2.resize(inner.astype(np.uint8), (orig_w, orig_h), interpolation=cv2.INTER_NEAREST)
     return restored
 
-# (MixUp/CutMix removed by request)
-
 
 def omni_train_tm(args, model, snapshot_path):
     if args.gpu:
@@ -189,6 +187,7 @@ def omni_train_tm(args, model, snapshot_path):
             )
         ]),
         prompt=args.prompt,
+        del_outlier=getattr(args, 'del_outlier', False),
     )
     if is_master:
         logging.info(f"[DBG] CLS train total samples: {len(db_train_cls)}; per-subset lens: {db_train_cls.subset_len}")

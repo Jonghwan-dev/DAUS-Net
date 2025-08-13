@@ -1,7 +1,6 @@
 import os
 
-# cls
-
+#cls
 source_path = "data/classification"
 
 for dataset in os.listdir(source_path):
@@ -43,8 +42,8 @@ for dataset in os.listdir(source_path):
     print(f"Train, Val, Test txt files created for {dataset} dataset.")
     print(f"Train images: {len(train_images)}, Val images: {len(val_images)}, Test images: {len(test_images)}")
     print("-" * 50)
+    
 # seg
-
 source_path = "data/segmentation"
 
 for dataset in os.listdir(source_path):

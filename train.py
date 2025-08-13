@@ -51,6 +51,8 @@ parser.add_argument('--pretrain_ckpt', type=str, help='pretrained checkpoint')
 
 parser.add_argument('--prompt', action='store_true', help='using prompt for training')
 parser.add_argument('--adapter_ft', action='store_true', help='using adapter for fine-tuning')
+parser.add_argument('--del_outlier', action='store_true',
+                    help='remove classification outliers listed in datasets/cls_outliers_organ.csv')
 
 # Weights & Biases logging
 parser.add_argument('--wandb_project', type=str, default='uusic25_tm', help='wandb project name')

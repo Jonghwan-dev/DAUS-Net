@@ -14,20 +14,17 @@ from datasets.omni_dataset import position_prompt_one_hot_dict
 from datasets.omni_dataset import nature_prompt_one_hot_dict
 from datasets.omni_dataset import type_prompt_one_hot_dict
 
-
 def random_horizontal_flip(image, label):
     axis = 1
     image = np.flip(image, axis=axis).copy()
     label = np.flip(label, axis=axis).copy()
     return image, label
 
-
 def random_rotate(image, label):
     angle = np.random.randint(-20, 20)
     image = ndimage.rotate(image, angle, order=0, reshape=False)
     label = ndimage.rotate(label, angle, order=0, reshape=False)
     return image, label
-
 
 def _aspect_ratio_resize_pad(image, label, out_h, out_w, pad_value_img=0.0, pad_value_lbl=0):
     """
@@ -56,13 +53,11 @@ def _aspect_ratio_resize_pad(image, label, out_h, out_w, pad_value_img=0.0, pad_
 
     return pad_img, pad_lbl
 
-
 def _maybe_hflip(image, label, p=0.5):
     if random.random() < p:
         image = np.ascontiguousarray(np.flip(image, axis=1))
         label = np.ascontiguousarray(np.flip(label, axis=1))
     return image, label
-
 
 def _random_rotation(image, label, max_deg=20, p=0.5):
     if random.random() < p:
@@ -73,7 +68,6 @@ def _random_rotation(image, label, max_deg=20, p=0.5):
         image = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0.0)
         label = cv2.warpAffine(label, M, (w, h), flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
     return image, label
-
 
 class RandomGeneratorTM(object):
     """
@@ -135,7 +129,6 @@ class RandomGeneratorTM(object):
             sample = {'image': image, 'label': label.long()}
         return sample
 
-
 class ResizePadTM(object):
     """
     Val/Test-time deterministic transform: aspect ratio resize + center pad to target size.
@@ -159,7 +152,6 @@ class ResizePadTM(object):
         else:
             sample = {'image': image, 'label': label.long()}
         return sample
-
 
 class RandomGenerator(object):
     def __init__(self, output_size):
@@ -226,7 +218,6 @@ class RandomGenerator(object):
             sample = {'image': image, 'label': label.long()}
         return sample
 
-
 class CenterCropGenerator(object):
     def __init__(self, output_size):
         self.output_size = output_size
@@ -255,7 +246,6 @@ class CenterCropGenerator(object):
         else:
             sample = {'image': image, 'label': label.long()}
         return sample
-
 
 class USdatasetSeg(Dataset):
     def __init__(self, base_dir, list_dir, split, transform=None, prompt=False):
@@ -297,7 +287,6 @@ class USdatasetSeg(Dataset):
             sample['nature_prompt'] = nature_prompt_one_hot_dict[nature_prompt_dict[dataset_name]]
             sample['position_prompt'] = position_prompt_one_hot_dict[position_prompt_dict[dataset_name]]
         return sample
-
 
 class USdatasetCls(Dataset):
     def __init__(self, base_dir, list_dir, split, transform=None, prompt=False):
