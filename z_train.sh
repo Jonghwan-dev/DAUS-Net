@@ -4,7 +4,7 @@ set -euo pipefail
 
 # ========== 사용자 설정 ==========
 ROOT=${ROOT:-data}
-OUT=${OUT:-train_output/run_$(date +%y%m%d_%H%M%S)}
+OUT=${OUT:-train_output/final_run}
 mkdir -p "${OUT}"
 
 IMG=${IMG:-224}
@@ -22,7 +22,7 @@ export CUBLAS_WORKSPACE_CONFIG=":4096:8"
 
 # W&B
 export WANDB_PROJECT=${WANDB_PROJECT:-uusic25_tm}
-if [[ "${WANDB_OFF:-0}" == "1" ]]; then
+if [[ "${WANDB_OFF:-1}" == "1" ]]; then
   WANDB_ARGS=(--wandb_off)
 else
   WANDB_ARGS=(--wandb_project "${WANDB_PROJECT}" ${WANDB_ENTITY:+--wandb_entity "$WANDB_ENTITY"} ${WANDB_RUN:+--wandb_run "$WANDB_RUN"})

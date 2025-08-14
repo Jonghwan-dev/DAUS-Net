@@ -1,5 +1,4 @@
 import os
-import cv2
 import json
 from PIL import Image
 import numpy as np
@@ -209,7 +208,9 @@ class Model:
                 out_h = out_w = self.args.img_size
                 _, new_h, new_w, off_y, off_x = _compute_resize_pad_params(orig_h, orig_w, out_h, out_w)
                 content = pred_mask_224[off_y:off_y+new_h, off_x:off_x+new_w]
-                restored = cv2.resize(content, (orig_w, orig_h), interpolation=cv2.INTER_NEAREST)
+                # Resize using PIL to avoid OpenCV dependency
+                restored = Image.fromarray(content).resize((orig_w, orig_h), resample=Image.NEAREST)
+                restored = np.array(restored)
                 restored = (restored > 0).astype(np.uint8) * 255
                 mask_img = Image.fromarray(restored)
 
@@ -222,13 +223,13 @@ class Model:
 
 
 if __name__ == '__main__':
-    input_dir = 'data/Val/'
-    data_list_path = 'data/Val/private_val_for_participants.json'
+    # Defaults match container mounts: /input (dir), /output (dir), /input_json (file)
+    input_dir = os.environ.get('INPUT_DIR', '/input')
+    data_list_path = os.environ.get('JSON_PATH', '/input_json')
+    output_dir = os.environ.get('OUTPUT_DIR', '/output')
 
-    output_dir = os.environ['OUTPUT_DIR']
-    
     os.makedirs(output_dir, exist_ok=True)
-    
+
     with open(data_list_path, 'r') as f:
         data_list = json.load(f)
 

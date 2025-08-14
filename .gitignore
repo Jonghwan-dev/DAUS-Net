@@ -2,8 +2,6 @@
 /wandb
 /util/LovaszSoftmax/
 __pycache__/
-runs_debug/
 pretrained_ckpt/
 submission_result/
 train_output/
-master_debug_loader.py
