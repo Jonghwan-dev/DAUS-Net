@@ -973,7 +973,7 @@ def omni_train_tm(args, model, snapshot_path):
                 wandb.log({'val/total_mean': float(TotalAvgPerformance)}, step=global_iter_num)
 
             # Best snapshot mgmt (TM)
-            best_flag_path = os.path.join(snapshot_path, 'best_model_tm.pth')
+            best_flag_path = os.path.join(snapshot_path, 'best_model_tmma.pth')
             # Track best via file name with score
             if (epoch_num == 0) or (TotalAvgPerformance >= omni_train_tm.best_performance if hasattr(omni_train_tm, 'best_performance') else -1):
                 prev_epoch = getattr(omni_train_tm, 'best_epoch', None)
@@ -987,7 +987,9 @@ def omni_train_tm(args, model, snapshot_path):
                 omni_train_tm.best_epoch = epoch_num
                 omni_train_tm.best_performance = TotalAvgPerformance
                 save_model_path = os.path.join(snapshot_path, 'best_model_tm_{}_{}.pth'.format(epoch_num, round(TotalAvgPerformance, 4)))
+                save_bt_model_path = os.path.join(snapshot_path, 'best_model.pth')  
                 torch.save(model.state_dict(), save_model_path)
+                torch.save(model.state_dict(), save_bt_model_path)
                 os.system('ln -s ' + os.path.abspath(save_model_path) + ' ' + best_flag_path)
                 logging.info("[TM] save best model to {}".format(save_model_path))
 

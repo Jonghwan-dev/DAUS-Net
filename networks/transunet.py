@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from .transUnet.transunet import TransUnet
 from .transUnet.vit_seg_modeling import VisionTransformer as ViT_seg
 from .transUnet.vit_seg_modeling import Transformer as ViT_Transformer
 from .transUnet.vit_seg_modeling import DecoderCup as ViT_Decoder

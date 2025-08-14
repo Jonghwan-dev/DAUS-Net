@@ -7,7 +7,6 @@ import torch.backends.cudnn as cudnn
 
 from networks.transunet import TransUnetTM
 from trainer import omni_train_tm
-from configs.config import get_config
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
@@ -46,8 +45,6 @@ parser.add_argument('--amp-opt-level', type=str, default='O1', choices=['O0', 'O
 parser.add_argument('--tag', help='tag of experiment')
 parser.add_argument('--eval', action='store_true', help='Perform evaluation only')
 parser.add_argument('--throughput', action='store_true', help='Test throughput only')
-
-parser.add_argument('--pretrain_ckpt', type=str, help='pretrained checkpoint')
 
 parser.add_argument('--prompt', action='store_true', help='using prompt for training')
 parser.add_argument('--adapter_ft', action='store_true', help='using adapter for fine-tuning')
@@ -129,10 +126,7 @@ parser.add_argument('--cls_head_variant', type=str, default='linear',
 parser.add_argument('--cls_dropout', type=float, default=0.3,
                     help='dropout for classification MLP trunks (if used)')
 
-
 args = parser.parse_args()
-
-config = get_config(args)
 
 
 if __name__ == "__main__":

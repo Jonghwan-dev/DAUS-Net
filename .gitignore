@@ -2,6 +2,7 @@
 /wandb
 /util/LovaszSoftmax/
 __pycache__/
-pretrained_ckpt/
 submission_result/
 train_output/
+train_checkpoint/
+
