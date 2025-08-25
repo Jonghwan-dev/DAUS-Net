@@ -23,16 +23,16 @@ COPY README.md .
 
 # 5) Copy dataset samples and model weights into the image (for self-contained runs)
 #    Note: This makes the image large; alternatively, you can mount these at runtime.
-COPY ./data/Val /app/input/
-COPY ./data/private_val_for_participants.json /app/input.json
-COPY ./train_checkpoint/best_model.pth /app/weights/best_model.pth
+COPY ./data/Val /input/
+COPY ./data/private_val_for_participants.json /input_json
+COPY ./train_checkpoint/best_model.pth /weights/best_model.pth
 
 # 6) Set environment variables (so code does not require path edits)
 #    These define the default in-container paths used by model.py
-ENV INPUT_DIR=/app/input
-ENV OUTPUT_DIR=/app/output
-ENV JSON_PATH=/app/input.json
-ENV CKPT=/app/weights/best_model.pth
+ENV INPUT_DIR=/input
+ENV OUTPUT_DIR=/output
+ENV JSON_PATH=/input_json
+ENV CKPT=/weights/best_model.pth
 
 # 7) Entrypoint and default command
 ENTRYPOINT ["python"]
