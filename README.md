@@ -1,10 +1,8 @@
 DAUS-Net: A Dynamically Adaptable Framework for Multi-task Ultrasound Analysis
 ==============================================================================
 
-> Participating in the UUSIC25: Universal Ultrasound Image Challenge (MICCAI 2025 Deep-Breath Workshop).  
-([Homepage] (https://uusic2025.github.io/))  
-> Official baseline: | Evaluation via Codabench (see baseline repo).  
- [Challenge] (https://github.com/uusic2025/challenge)  
+> Participating in the UUSIC25: Universal Ultrasound Image Challenge (MICCAI 2025 Deep-Breath Workshop | https://uusic2025.github.io/).  
+> Official baseline: | Evaluation via Codabench (see baseline repo| https://github.com/uusic2025/challenge)  
   
 Overview
 --------
