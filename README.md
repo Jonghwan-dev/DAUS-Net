@@ -1,9 +1,11 @@
 DAUS-Net: A Dynamically Adaptable Framework for Multi-task Ultrasound Analysis
 ==============================================================================
 
-> Participating in the UUSIC25: Universal Ultrasound Image Challenge (MICCAI 2025 Deep-Breath Workshop). ([Homepage] (https://uusic2025.github.io/))
-> Official baseline: [Challenge] (https://github.com/uusic2025/challenge) | Evaluation via Codabench (see baseline repo).
-
+> Participating in the UUSIC25: Universal Ultrasound Image Challenge (MICCAI 2025 Deep-Breath Workshop).  
+([Homepage] (https://uusic2025.github.io/))  
+> Official baseline: | Evaluation via Codabench (see baseline repo).  
+ [Challenge] (https://github.com/uusic2025/challenge)  
+  
 Overview
 --------
 DAUS-Net is a hybrid CNN–Transformer framework based on TransUNet for joint ultrasound tumor segmentation and classification. It introduces a Gated Low-Rank Adaptation (LoRA) mechanism to dynamically modulate reasoning pathways using positional and contextual prompts. For classification, DAUS-Net fuses Feature-wise Linear Modulation (FiLM) with prior logits to synergize visual evidence and contextual knowledge. The approach consistently improves upon the UniUSNet baseline.
