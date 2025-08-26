@@ -1,8 +1,8 @@
 DAUS-Net: A Dynamically Adaptable Framework for Multi-task Ultrasound Analysis
 ==============================================================================
 
-> Participating in the UUSIC25: Universal Ultrasound Image Challenge (MICCAI 2025 Deep-Breath Workshop).
-> Official baseline: https://github.com/uusic2025/challenge | Evaluation via Codabench (see baseline repo).
+> Participating in the UUSIC25: Universal Ultrasound Image Challenge (MICCAI 2025 Deep-Breath Workshop). ([Homepage] (https://uusic2025.github.io/))
+> Official baseline: [Challenge] (https://github.com/uusic2025/challenge) | Evaluation via Codabench (see baseline repo).
 
 Overview
 --------
@@ -34,7 +34,7 @@ Repository structure
 
 UUSIC25 Challenge (Essential Links)
 -----------------------------------
-- Official baseline repository: https://github.com/uusic2025/challenge
+- Official baseline repository: [Challenge](https://github.com/uusic2025/challenge)
 - Workshop: Deep-Breath 2025 (MICCAI 2025 satellite) — announcement of winners during the workshop in Daejeon, South Korea.
 - Evaluation: Codabench automated submission/evaluation with live leaderboards (see links from the baseline repository).
 
@@ -42,6 +42,31 @@ Requirements and environment
 ----------------------------
 - Python dependencies are listed in `requirements.txt`.
 - Torch environment is provided via the base image: `pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime`.
+
+Quickstart (Docker, recommended)
+--------------------------------
+For most users, the fastest way to run inference is via the pre-built Docker image.
+
+1) Pull the image
+
+```bash
+docker pull armyjh/ncck_bc:latest
+```
+
+2) Prepare paths and run
+
+```bash
+mkdir -p output
+docker run --rm --gpus all \
+  -v "/path/to/your/test_data/data":/input:ro \
+  -v "/path/to/your/test_data/data.json":/input_json:ro \
+  -v "$PWD/output":/output \
+  armyjh/ncck_bc:latest
+```
+
+Notes:
+- `/input_json` must be a single JSON file (file mount), not a directory.
+- The model checkpoint is already inside the image; no extra mount is needed.
 
 Local setup (without Docker)
 ----------------------------
@@ -71,38 +96,33 @@ Base image (fixed by competition rules):
 - `FROM pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime`
 
 Environment variables set in the image:
-- `INPUT_DIR=/app/input`
-- `OUTPUT_DIR=/app/output`
-- `JSON_PATH=/app/input.json`
-- `CKPT=/app/weights/best_model.pth`
+- `INPUT_DIR=/input`
+- `OUTPUT_DIR=/output`
+- `JSON_PATH=/input_json`
+- `CKPT=/weights/best_model.pth`
 
-Build the image (image name: `uusic`, tag: `ncck_bc`):
-
-```bash
-docker build -t uusic:ncck_bc .
-```
-
-Run the default entry (executes `python model.py`):
+Run the default entry with explicit envs (executes `python model.py`):
 
 ```bash
-docker run --rm \
-  -e INPUT_DIR=/app/input \
-  -e OUTPUT_DIR=/app/output \
-  -e JSON_PATH=/app/input.json \
-  -e CKPT=/app/weights/best_model.pth \
-  uusic:ncck_bc
+docker run --rm --gpus all \
+  -e INPUT_DIR=/input \
+  -e OUTPUT_DIR=/output \
+  -e JSON_PATH=/input_json \
+  -e CKPT=/weights/best_model.pth \
+  armyjh/ncck_bc:latest
 ```
 
 Note:
-- The Dockerfile demonstrates copying sample data and weights into the image (which increases image size). In practice, you may bind-mount your data and weights at runtime instead:
+- The Dockerfile demonstrates copying sample data and weights into the image (which increases image size). In practice, you may bind-mount your data and weights at runtime instead.
+- `/input_json` must be a single JSON file (file mount), not a directory.
 
 ```bash
 docker run --rm \
-  -v "$PWD/data/Val":/app/input:ro \
-  -v "$PWD/train_checkpoint/best_model.pth":/app/weights/best_model.pth:ro \
-  -v "$PWD/data/private_val_for_participants.json":/app/input.json:ro \
-  -v "$PWD/output":/app/output \
-  uusic:ncck_bc
+  -v "$PWD/data/Val":/input:ro \
+  -v "$PWD/train_checkpoint/best_model.pth":/weights/best_model.pth:ro \
+  -v "$PWD/data/private_val_for_participants.json":/input_json:ro \
+  -v "$PWD/output":/output \
+  armyjh/ncck_bc:latest
 ```
 
 Training
